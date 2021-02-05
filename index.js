@@ -268,7 +268,7 @@ module.exports = class ads1x15 {
 
       // Disable comparator, Non-latching, Alert/Rdy active low
       // traditional comparator, single-shot mode
-      config =
+      let config =
         ADS1015_REG_CONFIG_CQUE_NONE |
         ADS1015_REG_CONFIG_CLAT_NONLAT |
         ADS1015_REG_CONFIG_CPOL_ACTVLOW |
@@ -329,7 +329,7 @@ module.exports = class ads1x15 {
       // The minimum delay depends on the sps: delay >= 1s/sps
       // We add 1ms to be sure
 
-      delay = 1000 / sps + 1;
+      const delay = 1000 / sps + 1;
 
       setTimeout(() => {
         this.read(ADS1015_REG_POINTER_CONVERT, 2, (err, res) => {
@@ -434,7 +434,7 @@ module.exports = class ads1x15 {
       // traditional comparator, continuous mode
       // The last flag is the only change we need, page 11 datasheet
 
-      config =
+      let config =
         ADS1015_REG_CONFIG_CQUE_NONE |
         ADS1015_REG_CONFIG_CLAT_NONLAT |
         ADS1015_REG_CONFIG_CPOL_ACTVLOW |
@@ -497,7 +497,7 @@ module.exports = class ads1x15 {
       // The minimum delay depends on the sps: delay >= 1s/sps
       // We add 1ms to be sure
 
-      delay = 1000 / sps + 1;
+      const delay = 1000 / sps + 1;
       setTimeout(() => {
         this.read(ADS1015_REG_POINTER_CONVERT, 2, (err, res) => {
           if (this.ic == IC_ADS1015) {
@@ -531,7 +531,7 @@ module.exports = class ads1x15 {
     // Write the default config register to the ADC
     // Once we write, the ADC will do a single conversion and
     //  enter power-off mode.
-    config = 0x8583; // Page 18 datasheet.
+    let config = 0x8583; // Page 18 datasheet.
     this.write(
       ADS1015_REG_POINTER_CONFIG,
       [(config >> 8) & 0xff, config & 0xff],
@@ -602,7 +602,7 @@ module.exports = class ads1x15 {
       }
 
       // Continuous mode
-      config = ADS1015_REG_CONFIG_MODE_CONTIN;
+      let config = ADS1015_REG_CONFIG_MODE_CONTIN;
       if (activeLow == false) {
         config |= ADS1015_REG_CONFIG_CPOL_ACTVHI;
       } else {
@@ -749,7 +749,7 @@ module.exports = class ads1x15 {
       this.busy = true;
 
       // Continuous mode
-      config = ADS1015_REG_CONFIG_MODE_CONTIN;
+      let config = ADS1015_REG_CONFIG_MODE_CONTIN;
       if (activeLow == False) {
         config |= ADS1015_REG_CONFIG_CPOL_ACTVHI;
       } else {
