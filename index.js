@@ -333,25 +333,32 @@ module.exports = class ads1x15 {
 
       setTimeout(() => {
         this.read(ADS1015_REG_POINTER_CONVERT, 2, (err, res) => {
-          if (this.ic == IC_ADS1015) {
-            // Shift right 4 bits for the 12-bit ADS1015 and convert to mV
-            var data =
-              ((((res[0] << 8) | (res[1] & 0xff)) >> 4) * pga) / 2048.0;
+          if(err) {
             this.busy = false;
-            callback(null, data);
+            callback(
+              "We've got an Error, Lance Constable Carrot!: " + err.toString()
+            );
           } else {
-            // Return a mV value for the ADS1115
-            // (Take signed values into account as well)
-            var data = -1;
-            var val = (res[0] << 8) | res[1];
-            if (val > 0x7fff) {
-              data = ((val - 0xffff) * pga) / 32768.0;
-            } else {
-              data = (((res[0] << 8) | res[1]) * pga) / 32768.0;
+              if (this.ic == IC_ADS1015) {
+                // Shift right 4 bits for the 12-bit ADS1015 and convert to mV
+                var data =
+                  ((((res[0] << 8) | (res[1] & 0xff)) >> 4) * pga) / 2048.0;
+                this.busy = false;
+                callback(null, data);
+              } else {
+                // Return a mV value for the ADS1115
+                // (Take signed values into account as well)
+                var data = -1;
+                var val = (res[0] << 8) | res[1];
+                if (val > 0x7fff) {
+                  data = ((val - 0xffff) * pga) / 32768.0;
+                } else {
+                  data = (((res[0] << 8) | res[1]) * pga) / 32768.0;
+                }
+                this.busy = false;
+                callback(null, data);
+              }
             }
-            this.busy = false;
-            callback(null, data);
-          }
         });
       }, delay);
     } else {
